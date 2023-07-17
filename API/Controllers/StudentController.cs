@@ -48,7 +48,36 @@ public class StudentController : BaseApiController
                return BadRequest();
           }
           return CreatedAtAction(nameof(Post), new {id = student.IdStudent}, student);
-     }     
+     }   
 
+     //Metodo PUT permite editar un registro de la entidad
+     [HttpPut("{id}")]
+     [ProducesResponseType(StatusCodes.Status200OK)]
+     [ProducesResponseType(StatusCodes.Status404NotFound)]
+     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+     public async Task<ActionResult<Student>> Put(string id, [FromBody]Student student)
+     {
+          if (student == null) {
+               return NotFound();
+          }
+          _UnitOfWork.Students.Update(student);
+          await _UnitOfWork.SaveAsync();
+          return student;
+     }  
+
+     //Metodo DELETE permite eliminar un registro de la entidad
+     [HttpDelete("{id}")]
+     [ProducesResponseType(StatusCodes.Status200OK)]
+     [ProducesResponseType(StatusCodes.Status404NotFound)]
+     public async Task<ActionResult> Delete(string id)
+     {
+          var student = await _UnitOfWork.Students.GetByIdAsync(id);
+          if (student == null) {
+               return NotFound();
+          }
+          _UnitOfWork.Students.Remove(student);
+          await _UnitOfWork.SaveAsync();
+          return NoContent();
+     }
         
 }

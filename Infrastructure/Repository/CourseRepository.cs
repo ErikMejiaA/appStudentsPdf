@@ -38,7 +38,12 @@ public class CourseRepository : ICourseInterface
         return await _context.Set<Course>().ToListAsync();
     }
 
-    public async Task<Course>? GetByIdAsync(string id)
+    public Task GetByIdAsycn(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Course> GetByIdAsync(string id)
     {
         return await _context.Set<Course>().FindAsync(id);
     }

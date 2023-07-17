@@ -51,5 +51,34 @@ public class CourseController : BaseApiController
         return CreatedAtAction(nameof(Post), new {id = course.IdCourse}, course);
     }
 
-        
+    //Metodo PUT permite editar un registro de la entidad
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<Course>> Put(string id, [FromBody]Course course)
+    {
+        if (course == null) {
+            return NotFound();
+        }
+        _UnitOfWork.Courses.Update(course);
+        await _UnitOfWork.SaveAsync();
+        return course;
+    }
+
+    //Metodo DELETE permite eliminar un registro de la entidad
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> Delete(string id)
+    {
+        var course = await _UnitOfWork.Courses.GetByIdAsync(id);
+        if (course == null) {
+            return NotFound();
+        }
+        _UnitOfWork.Courses.Remove(course);
+        await _UnitOfWork.SaveAsync();
+        return NoContent();
+    }
+   
 }

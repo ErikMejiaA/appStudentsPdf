@@ -38,7 +38,7 @@ public class StudentRepository : IStudentInterface
         return await _context.Set<Student>().ToListAsync();
     }
 
-    public async Task<Student>? GetByIdAsync(string id)
+    public async Task<Student> GetByIdAsync(string id)
     {
         return await _context.Set<Student>().FindAsync(id);
     }
